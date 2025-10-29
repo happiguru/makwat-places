@@ -1,0 +1,42 @@
+{
+  "name": "mkwat/makwat-places",
+  "description": "Cameroon administrative places (Country, Regions, Divisions, Subdivisions, Localities) with optional Laravel integration",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Stanley Enow Lekunze",
+  "email": "hguruman@gmail.com"
+    }
+  ],
+  "homepage": "https://github.com/happiguru/makwat-places",
+  "autoload": {
+    "psr-4": {
+      "Mkwat\\Places\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Mkwat\\Places\\Tests\\": "tests/"
+    }
+  },
+  "require": {
+    "php": ">=7.4"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^11.5"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Mkwat\\Places\\Laravel\\PlacesServiceProvider"
+      ],
+      "aliases": {
+        "Places": "Mkwat\\Places\\Laravel\\Facades\\Places"
+      }
+    }
+  },
+  "bin": [
+    "bin/makwat-places-update"
+  ]
+}
