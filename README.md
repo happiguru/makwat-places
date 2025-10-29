@@ -1,634 +1,134 @@
-# Makwat Places# Makwat Places# Makwat Places
+# Makwat Places
 
+A clean PHP library for Cameroon administrative places with optional Laravel integration.
 
+- Levels: country, region, division, subdivision, locality
+- API: `country()`, `regions()`, `divisions([regionCode])`, `subdivisions([divisionCode])`, `localities([parentCode])`, `findByCode(code)`, `search(query[, level])`
+- Ships with a curated seed JSON. Pluggable data sources for future expansion.
 
-![GitHub Repo](https://img.shields.io/github/v/tag/happiguru/makwat-places?label=version)
-
-![GitHub Stars](https://img.shields.io/github/stars/happiguru/makwat-places?style=social)
-
-![GitHub Repo](https://img.shields.io/github/v/tag/happiguru/makwat-places?label=version)![GitHub Repo](https://img.shields.io/github/v/tag/happiguru/makwat-places?label=version)
-
-**Author:** Stanley Enow Lekunze  
-
-**Homepage:** [GitHub Repository](https://github.com/happiguru/makwat-places)![GitHub Stars](https://img.shields.io/github/stars/happiguru/makwat-places?style=social)![GitHub Stars](https://img.shields.io/github/stars/happiguru/makwat-places?style=social)
-
-
-
-## Description
-
-
-
-Makwat Places is a PHP library for working with Cameroon administrative places, including Country, Regions, Divisions, Subdivisions, and Localities. It provides a simple API for querying hierarchical place data, supports searching and code-based lookups, and is designed for easy integration with Laravel applications.**Author:** Stanley Enow Lekunze  **Author:** Stanley Enow Lekunze  
-
-
-
-## Features**Homepage:** [GitHub Repository](https://github.com/happiguru/makwat-places)**Homepage:** [GitHub Repository](https://github.com/happiguru/makwat-places)
-
-
-
-- Retrieve Cameroon country and regions
-
-- Query divisions, subdivisions, and localities
-
-- Find places by code## Description## Description
-
-- Search places by name or level
-
-- Extensible data source architecture
-
-- Ships with a curated seed JSON and an extensible architecture to plug other data sources later
-
-Makwat Places is a PHP library for working with Cameroon administrative places, including Country, Regions, Divisions, Subdivisions, and Localities. It provides a simple API for querying hierarchical place data, supports searching and code-based lookups, and is designed for easy integration with Laravel applications.Makwat Places is a PHP library for working with Cameroon administrative places, including Country, Regions, Divisions, Subdivisions, and Localities. It provides a simple API for querying hierarchical place data, supports searching and code-based lookups, and is designed for easy integration with Laravel applications.
+---
 
 ## Table of Contents
 
-
-
 - [Installation](#installation)
-
-- [Data Source](#data-source)## Features## Features
-
-- [Usage](#usage)
-
-  - [Generic PHP](#generic-php)
-
-  - [Laravel Integration](#laravel-integration)
-
-- [Extending the Data](#extending-the-data)- Retrieve Cameroon country and regions- Retrieve Cameroon country and regions
-
-- [CLI Updater](#cli-updater)
-
-- [Performance Notes](#performance-notes)- Query divisions, subdivisions, and localities- Query divisions, subdivisions, and localities
-
-- [Versioning and PHP Support](#versioning-and-php-support)
-
-- [License](#license)- Find places by code- Find places by code
-
-
-
-## Installation- Search places by name or level- Search places by name or level
-
-
-
-When published to Packagist:  - Extensible data source architecture- Extensible data source architecture
-
-Until then (local path repository):
-
-- Ships with a curated seed JSON and an extensible architecture to plug other data sources later- Ships with a curated seed JSON and an extensible architecture to plug other data sources later
-
-1. In your consuming project's `composer.json` add a path repository and require it:
-
-
-
-```json
-
-  "repositories": [## Table of Contents
-
-    { "type": "path", "url": "../Cameroon_Library", "options": { "symlink": true } }
-
-  ],- [Installation](#installation)
-
-  "require": {- [Data Source](#data-source)
-
-    "mkwat/makwat-places": "*@dev"- [Usage](#usage)
-
-  }  - [Generic PHP](#generic-php)
-
-```  - [Laravel Integration](#laravel-integration)
-
+  - [Packagist](#packagist)
+  - [Local Path Repository (Development)](#local-path-repository-development)
+- [Data Source](#data-source)
+- [Usage in Generic PHP](#usage-in-generic-php)
+  - [Custom Data Path](#custom-data-path)
+- [Laravel Integration](#laravel-integration)
+  - [Publish Config](#publish-config)
+  - [Using the Container](#using-the-container)
+  - [Using the Facade](#using-the-facade)
+  - [Controller Example](#controller-example)
+  - [Blade Example](#blade-example)
+  - [Validation Example](#validation-example)
 - [Extending the Data](#extending-the-data)
-
-2. Run:- [CLI Updater](#cli-updater)
-
+- [CLI Updater (WIP)](#cli-updater-wip)
 - [Performance Notes](#performance-notes)
+- [Versioning and PHP Support](#versioning-and-php-support)
+- [License](#license)
 
-```bash- [Versioning and PHP Support](#versioning-and-php-support)
+---
 
-composer update mkwat/makwat-places- [License](#license)
+## Installation
 
+### Packagist
+
+```bash
+composer require mkwat/makwat-places
 ```
 
+### Local Path Repository (Development)
 
+Add to your consuming project's `composer.json`:
+
+```json
+{
+  "repositories": [
+    { "type": "path", "url": "../Cameroon_Library", "options": { "symlink": true } }
+  ],
+  "require": {
+    "mkwat/makwat-places": "*@dev"
+  }
+}
+```
+
+Then install/update:
+
+```bash
+composer update mkwat/makwat-places
+```
+
+---
 
 ## Data Source
 
-## Installation## Installation
-
 - Default: local JSON at `data/places.json` bundled with the package.
-
 - You can extend the JSON with your own entries (same schema) or later use a remote updater.
 
+Schema per record:
 
-
-Schema per record:When published to Packagist:When published to Packagist:
-
-
-
-```jsonUntil then (local path repository):Until then (local path repository):
-
+```json
 {
-
   "code": "CM-SW-FA-BU",
-
   "name": "Buea",
-
-  "level": "subdivision",1. In your consuming project's `composer.json` add a path repository and require it:1. In your consuming project's `composer.json` add a path repository and require it:
-
+  "level": "subdivision",
   "parent": "CM-SW-FA",
-
   "meta": {"any": "extra"}
-
 }
+```
 
-``````json```json
+Levels: `country | region | division | subdivision | locality`. `parent` is the code of the immediate parent.
 
+---
 
+## Usage in Generic PHP
 
-Levels must be one of: `country` | `region` | `division` | `subdivision` | `locality`. Parent is the code of the immediate parent.  "repositories": [  "repositories": [
+Minimal example:
 
-
-
-## Usage    { "type": "path", "url": "../Cameroon_Library", "options": { "symlink": true } }    { "type": "path", "url": "../Cameroon_Library", "options": { "symlink": true } }
-
-
-
-### Generic PHP  ],  ],
-
-
-
-Minimal example:  "require": {  "require": {
-
-
-
-```php    "mkwat/makwat-places": "*@dev"    "mkwat/makwat-places": "*@dev"
-
+```php
 <?php
-
-require __DIR__ . '/vendor/autoload.php';  }  }
-
-
-
-$places = CameroonPlaces::makeDefault();``````
-
-
-
-$divisionsInSW = $places->divisions('CM-SW');
-
-$subdivisionsInFako = $places->subdivisions('CM-SW-FA');
-
-$buea = $places->findByCode('CM-SW-FA-BU');2. Run:2. Run:
-
-$search = $places->search('Limbe');
-
-
-
-print_r([$country->toArray(), count($regions), count($divisionsInSW)]);
-
-`````````
-
-
-
-Custom data path (if you copy or build your own JSON):composer update mkwat/makwat-placescomposer update mkwat/makwat-places
-
-
-
-```php``````
-
-use Mkwat\Places\Repository\PlacesRepository;
-
-use Mkwat\Places\Repository\DataSources\LocalJsonSource;
-
-
-
-$repo = new PlacesRepository(new LocalJsonSource(__DIR__ . '/my_places.json'));## Data Source## Data Source
-
-$places = new CameroonPlaces($repo);
-
-```
-
-
-
-### Laravel Integration- Default: local JSON at `data/places.json` bundled with the package.- Default: local JSON at `data/places.json` bundled with the package.
-
-
-
-This package auto-discovers the service provider and facade in Laravel (5.5+). After installing via Composer:- You can extend the JSON with your own entries (same schema) or later use a remote updater.- You can extend the JSON with your own entries (same schema) or later use a remote updater.
-
-
-
-- Publish config (optional) to override data path:
-
-
-
-```bashSchema per record:Schema per record:
-
-php artisan vendor:publish --tag=config --provider="Mkwat\\Places\\Laravel\\PlacesServiceProvider"
-
-```
-
-
-
-- The config file `makwat_places.php` contains:```json```json
-
-
-
-```php{{
-
-return [
-
-    'data_path' => base_path('vendor/mkwat/makwat-places/data/places.json'),  "code": "CM-SW-FA-BU",  "code": "CM-SW-FA-BU",
-
-];
-
-```  "name": "Buea",  "name": "Buea",
-
-
-
-- Resolve from the container:  "level": "subdivision",  "level": "subdivision",
-
-
-
-```php  "parent": "CM-SW-FA",  "parent": "CM-SW-FA",
+require __DIR__ . '/vendor/autoload.php';
 
 use Mkwat\Places\CameroonPlaces;
 
-  "meta": {"any": "extra"}  "meta": {"any": "extra"}
+$places = CameroonPlaces::makeDefault();
 
-$places = app(CameroonPlaces::class);
+$country = $places->country();
+$regions = $places->regions();
+$divisionsInSW = $places->divisions('CM-SW');
+$subdivisionsInFako = $places->subdivisions('CM-SW-FA');
+$buea = $places->findByCode('CM-SW-FA-BU');
+$search = $places->search('Limbe');
 
-$regions = $places->regions();}}
-
+print_r([$country->toArray(), count($regions), count($divisionsInSW)]);
 ```
 
-``````
-
-- Or via the facade alias `Places`:
-
-
+### Custom Data Path
 
 ```php
+use Mkwat\Places\Repository\PlacesRepository;
+use Mkwat\Places\Repository\DataSources\LocalJsonSource;
+use Mkwat\Places\CameroonPlaces;
 
-use Places;Levels must be one of: `country` | `region` | `division` | `subdivision` | `locality`. Parent is the code of the immediate parent.Levels must be one of: `country` | `region` | `division` | `subdivision` | `locality`. Parent is the code of the immediate parent.
-
-
-
-$divisions = Places::divisions('CM-SW');
-
+$repo = new PlacesRepository(new LocalJsonSource(__DIR__ . '/my_places.json'));
+$places = new CameroonPlaces($repo);
 ```
 
-## Usage## Usage
+---
 
-- Example Controller usage:
+## Laravel Integration
 
+This package auto-discovers the service provider and facade in Laravel (5.5+).
 
+### Publish Config
 
-```php
-
-<?php### Generic PHP### Generic PHP
-
-
-
-namespace App\Http\Controllers;
-
-
-
-use Illuminate\Http\Request;Minimal example:Minimal example:
-
-use Mkwat\Places\CameroonPlaces; // or use Places facade
-
-
-
-class PlacesController extends Controller
-
-{```php```php
-
-    public function regions(CameroonPlaces $places)
-
-    {<?php<?php
-
-        return response()->json(array_map(fn($p) => $p->toArray(), $places->regions()));
-
-    }require __DIR__ . '/vendor/autoload.php';require __DIR__ . '/vendor/autoload.php';
-
-
-
-    public function divisions($regionCode, CameroonPlaces $places)
-
-    {
-
-        return response()->json(array_map(fn($p) => $p->toArray(), $places->divisions($regionCode)));$places = CameroonPlaces::makeDefault();$places = CameroonPlaces::makeDefault();
-
-    }
-
-}
-
-```
-
-$divisionsInSW = $places->divisions('CM-SW');$divisionsInSW = $places->divisions('CM-SW');
-
-- Example Blade snippet:
-
-$subdivisionsInFako = $places->subdivisions('CM-SW-FA');$subdivisionsInFako = $places->subdivisions('CM-SW-FA');
-
-```php
-
-@php($regions = Places::regions())$buea = $places->findByCode('CM-SW-FA-BU');$buea = $places->findByCode('CM-SW-FA-BU');
-
-<select name="region">
-
-  @foreach ($regions as $r)$search = $places->search('Limbe');$search = $places->search('Limbe');
-
-    <option value="{{ $r->code }}">{{ $r->name }}</option>
-
-  @endforeach
-
-</select>
-
-```print_r([$country->toArray(), count($regions), count($divisionsInSW)]);print_r([$country->toArray(), count($regions), count($divisionsInSW)]);
-
-
-
-- Example validation rule using codes from the package:``````
-
-
-
-```php
-
-use Illuminate\Support\Arr;
-
-use Places;Custom data path (if you copy or build your own JSON):Custom data path (if you copy or build your own JSON):
-
-
-
-$regionCodes = array_map(fn($p) => $p->code, Places::regions());
-
-$request->validate([
-
-  'region' => ['required', 'in:' . implode(',', $regionCodes)],```php```php
-
-]);
-
-```use Mkwat\Places\Repository\PlacesRepository;use Mkwat\Places\Repository\PlacesRepository;
-
-
-
-## Extending the Datause Mkwat\Places\Repository\DataSources\LocalJsonSource;use Mkwat\Places\Repository\DataSources\LocalJsonSource;
-
-
-
-- Edit `data/places.json` and add entries following the schema. The repository will index them automatically.
-
-- If you maintain your own copy outside `vendor/`, set `config('makwat_places.data_path')` in Laravel or instantiate `CameroonPlaces` with a custom repository in plain PHP.
-
-$repo = new PlacesRepository(new LocalJsonSource(__DIR__ . '/my_places.json'));$repo = new PlacesRepository(new LocalJsonSource(__DIR__ . '/my_places.json'));
-
-## CLI Updater (WIP)
-
-$places = new CameroonPlaces($repo);$places = new CameroonPlaces($repo);
-
-`bin/makwat-places-update` is a placeholder. Planned behavior:
-
-- Query HumData CKAN API to resolve latest resource URLs``````
-
-- Download CSV/GeoJSON
-
-- Map fields to the internal schema and rebuild `data/places.json`
-
-
-
-## Performance Notes### Laravel Integration### Laravel Integration
-
-
-
-- The repository loads the JSON into memory and builds indexes by code, level, and parent.
-
-- For very large locality lists, consider keeping localities in a separate file or implement lazy loading in a custom data source.
-
-This package auto-discovers the service provider and facade in Laravel (5.5+). After installing via Composer:This package auto-discovers the service provider and facade in Laravel (5.5+). After installing via Composer:
-
-## Versioning and PHP Support
-
-
-
-- PHP >= 7.4
-
-- Tested with PHPUnit (you can add tests under `tests/`)- Publish config (optional) to override data path:- Publish config (optional) to override data path:
-
-
-
-## License
-
-
-
-MIT``````
-
-php artisan vendor:publish --tag=config --provider="Mkwat\\Places\\Laravel\\PlacesServiceProvider"php artisan vendor:publish --tag=config --provider="Mkwat\\Places\\Laravel\\PlacesServiceProvider"
-
-``````
-
-
-
-- The config file `makwat_places.php` contains:- The config file `makwat_places.php` contains:
-
-
-
-```php```php
-
-return [return [
-
-    'data_path' => base_path('vendor/mkwat/makwat-places/data/places.json'),    'data_path' => base_path('vendor/mkwat/makwat-places/data/places.json'),
-
-];];
-
-``````
-
-
-
-- Resolve from the container:- Resolve from the container:
-
-
-
-```php```php
-
-use Mkwat\Places\CameroonPlaces;use Mkwat\Places\CameroonPlaces;
-
-
-
-$places = app(CameroonPlaces::class);$places = app(CameroonPlaces::class);
-
-$regions = $places->regions();$regions = $places->regions();
-
-``````
-
-
-
-- Or via the facade alias `Places`:- Or via the facade alias `Places`:
-
-
-
-```php```php
-
-use Places;use Places;
-
-
-
-$divisions = Places::divisions('CM-SW');$divisions = Places::divisions('CM-SW');
-
-``````
-
-
-
-- Example Controller usage:- Example Controller usage:
-
-
-
-```php```php
-
-<?php<?php
-
-
-
-namespace App\Http\Controllers;namespace App\Http\Controllers;
-
-
-
-use Illuminate\Http\Request;use Illuminate\Http\Request;
-
-use Mkwat\Places\CameroonPlaces; // or use Places facadeuse Mkwat\Places\CameroonPlaces; // or use Places facade
-
-
-
-class PlacesController extends Controllerclass PlacesController extends Controller
-
-{{
-
-    public function regions(CameroonPlaces $places)    public function regions(CameroonPlaces $places)
-
-    {    {
-
-        return response()->json(array_map(fn($p) => $p->toArray(), $places->regions()));        return response()->json(array_map(fn($p) => $p->toArray(), $places->regions()));
-
-    }    }
-
-
-
-    public function divisions($regionCode, CameroonPlaces $places)    public function divisions($regionCode, CameroonPlaces $places)
-
-    {    {
-
-        return response()->json(array_map(fn($p) => $p->toArray(), $places->divisions($regionCode)));        return response()->json(array_map(fn($p) => $p->toArray(), $places->divisions($regionCode)));
-
-    }    }
-
-}}
-
-``````
-
-
-
-- Example Blade snippet:- Example Blade snippet:
-
-
-
-```php```php
-
-@php($regions = Places::regions())@php($regions = Places::regions())
-
-<select name="region"><select name="region">
-
-  @foreach ($regions as $r)  @foreach ($regions as $r)
-
-    <option value="{{ $r->code }}">{{ $r->name }}</option>    <option value="{{ $r->code }}">{{ $r->name }}</option>
-
-  @endforeach  @endforeach
-
-</select></select>
-
-``````
-
-
-
-- Example validation rule using codes from the package:- Example validation rule using codes from the package:
-
-
-
-```php```php
-
-use Illuminate\Support\Arr;use Illuminate\Support\Arr;
-
-use Places;use Places;
-
-
-
-$regionCodes = array_map(fn($p) => $p->code, Places::regions());$regionCodes = array_map(fn($p) => $p->code, Places::regions());
-
-$request->validate([$request->validate([
-
-  'region' => ['required', 'in:' . implode(',', $regionCodes)],  'region' => ['required', 'in:' . implode(',', $regionCodes)],
-
-]);]);
-
-``````
-
-
-
-## Extending the Data## Extending the Data
-
-
-
-- Edit `data/places.json` and add entries following the schema. The repository will index them automatically.- Edit `data/places.json` and add entries following the schema. The repository will index them automatically.
-
-- If you maintain your own copy outside `vendor/`, set `config('makwat_places.data_path')` in Laravel or instantiate `CameroonPlaces` with a custom repository in plain PHP.- If you maintain your own copy outside `vendor/`, set `config('makwat_places.data_path')` in Laravel or instantiate `CameroonPlaces` with a custom repository in plain PHP.
-
-
-
-## CLI Updater (WIP)## CLI Updater (WIP)
-
-
-
-`bin/makwat-places-update` is a placeholder. Planned behavior:`bin/makwat-places-update` is a placeholder. Planned behavior:
-
-- Query HumData CKAN API to resolve latest resource URLs- Query HumData CKAN API to resolve latest resource URLs
-
-- Download CSV/GeoJSON- Download CSV/GeoJSON
-
-- Map fields to the internal schema and rebuild `data/places.json`- Map fields to the internal schema and rebuild `data/places.json`
-
-
-
-## Performance Notes## Performance Notes
-
-
-
-- The repository loads the JSON into memory and builds indexes by code, level, and parent.- The repository loads the JSON into memory and builds indexes by code, level, and parent.
-
-- For very large locality lists, consider keeping localities in a separate file or implement lazy loading in a custom data source.- For very large locality lists, consider keeping localities in a separate file or implement lazy loading in a custom data source.
-
-
-
-## Versioning and PHP Support## Versioning and PHP Support
-
-
-
-- PHP >= 7.4- PHP >= 7.4
-
-- Tested with PHPUnit (you can add tests under `tests/`)- Tested with PHPUnit (you can add tests under `tests/`)
-
-
-
-## License## License
-
-
-
-MITMIT
-
-- Publish config (optional) to override data path:
-
-```
+```bash
 php artisan vendor:publish --tag=config --provider="Mkwat\\Places\\Laravel\\PlacesServiceProvider"
 ```
 
-- The config file makwat_places.php contains:
+This publishes `config/makwat_places.php`:
 
 ```php
 return [
@@ -636,7 +136,7 @@ return [
 ];
 ```
 
-- Resolve from the container:
+### Using the Container
 
 ```php
 use Mkwat\Places\CameroonPlaces;
@@ -645,7 +145,7 @@ $places = app(CameroonPlaces::class);
 $regions = $places->regions();
 ```
 
-- Or via the facade alias Places:
+### Using the Facade
 
 ```php
 use Places;
@@ -653,7 +153,7 @@ use Places;
 $divisions = Places::divisions('CM-SW');
 ```
 
-- Example Controller usage:
+### Controller Example
 
 ```php
 <?php
@@ -677,7 +177,7 @@ class PlacesController extends Controller
 }
 ```
 
-- Example Blade snippet:
+### Blade Example
 
 ```php
 @php($regions = Places::regions())
@@ -688,7 +188,7 @@ class PlacesController extends Controller
 </select>
 ```
 
-- Example validation rule using codes from the package:
+### Validation Example
 
 ```php
 use Illuminate\Support\Arr;
@@ -702,23 +202,24 @@ $request->validate([
 
 ---
 
-## Extending the data
+## Extending the Data
 
-- Edit data/places.json and add entries following the schema. The repository will index them automatically.
-- If you maintain your own copy outside vendor/, set config('makwat_places.data_path') in Laravel or instantiate CameroonPlaces with a custom repository in plain PHP.
+- Edit `data/places.json` and add entries following the schema. The repository will index them automatically.
+- If you maintain your own copy outside `vendor/`, set `config('makwat_places.data_path')` in Laravel or instantiate `CameroonPlaces` with a custom repository in plain PHP.
 
 ---
 
-## CLI updater (WIP)
+## CLI Updater (WIP)
 
 `bin/makwat-places-update` is a placeholder. Planned behavior:
+
 - Query HumData CKAN API to resolve latest resource URLs
 - Download CSV/GeoJSON
-- Map fields to the internal schema and rebuild data/places.json
+- Map fields to the internal schema and rebuild `data/places.json`
 
 ---
 
-## Performance notes
+## Performance Notes
 
 - The repository loads the JSON into memory and builds indexes by code, level, and parent.
 - For very large locality lists, consider keeping localities in a separate file or implement lazy loading in a custom data source.
@@ -728,13 +229,10 @@ $request->validate([
 ## Versioning and PHP Support
 
 - PHP >= 7.4
-- Tested with PHPUnit (you can add tests under tests/)
+- Tested with PHPUnit (you can add tests under `tests/`)
 
 ---
 
 ## License
 
 MIT
-#   m a k w a t - p l a c e s 
- 
- 
