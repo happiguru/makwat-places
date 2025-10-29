@@ -1,0 +1,29 @@
+[
+  {"code": "CM", "name": "Cameroon", "level": "country", "parent": null, "meta": {"iso2": "CM", "iso3": "CMR"}},
+
+  {"code": "CM-AD", "name": "Adamawa", "level": "region", "parent": "CM", "meta": {"alt": "Adamaoua"}},
+  {"code": "CM-CE", "name": "Centre", "level": "region", "parent": "CM", "meta": {}},
+  {"code": "CM-EN", "name": "Far North", "level": "region", "parent": "CM", "meta": {"alt": "Extrême-Nord"}},
+  {"code": "CM-ES", "name": "East", "level": "region", "parent": "CM", "meta": {"alt": "Est"}},
+  {"code": "CM-LT", "name": "Littoral", "level": "region", "parent": "CM", "meta": {}},
+  {"code": "CM-NO", "name": "North", "level": "region", "parent": "CM", "meta": {"alt": "Nord"}},
+  {"code": "CM-NW", "name": "North-West", "level": "region", "parent": "CM", "meta": {"alt": "Nord-Ouest"}},
+  {"code": "CM-OU", "name": "West", "level": "region", "parent": "CM", "meta": {"alt": "Ouest"}},
+  {"code": "CM-SU", "name": "South", "level": "region", "parent": "CM", "meta": {"alt": "Sud"}},
+  {"code": "CM-SW", "name": "South-West", "level": "region", "parent": "CM", "meta": {"alt": "Sud-Ouest"}},
+
+  {"code": "CM-CE-MF", "name": "Mfoundi", "level": "division", "parent": "CM-CE", "meta": {}},
+  {"code": "CM-LT-WU", "name": "Wouri", "level": "division", "parent": "CM-LT", "meta": {}},
+  {"code": "CM-NW-MO", "name": "Mezam", "level": "division", "parent": "CM-NW", "meta": {}},
+  {"code": "CM-SW-FA", "name": "Fako", "level": "division", "parent": "CM-SW", "meta": {}},
+
+  {"code": "CM-SW-FA-BU", "name": "Buea", "level": "subdivision", "parent": "CM-SW-FA", "meta": {}},
+  {"code": "CM-SW-FA-LM", "name": "Limbe I", "level": "subdivision", "parent": "CM-SW-FA", "meta": {}},
+  {"code": "CM-SW-FA-LII", "name": "Limbe II", "level": "subdivision", "parent": "CM-SW-FA", "meta": {}},
+  {"code": "CM-SW-FA-LIII", "name": "Limbe III", "level": "subdivision", "parent": "CM-SW-FA", "meta": {}},
+
+  {"code": "LOC-BUEA", "name": "Buea Town", "level": "locality", "parent": "CM-SW-FA-BU", "meta": {}},
+  {"code": "LOC-MUEA", "name": "Muea", "level": "locality", "parent": "CM-SW-FA-BU", "meta": {}},
+  {"code": "LOC-LIMBE-DWN", "name": "Down Beach", "level": "locality", "parent": "CM-SW-FA-LM", "meta": {}},
+  {"code": "LOC-BONABERI", "name": "Bonaberi", "level": "locality", "parent": "CM-LT-WU", "meta": {"note": "Parent can be a division if locality mapping to subdivision is unknown"}}
+]

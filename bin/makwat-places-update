@@ -1,0 +1,7 @@
+#!/usr/bin/env php
+<?php
+
+// Placeholder updater. In future, resolve CKAN resources and rebuild data/places.json
+
+fwrite(STDERR, "makwat-places-update: updater not yet implemented. Configure a remote data source and mapping.\n");
+exit(1);

@@ -1,0 +1,1 @@
+{"version":2,"defects":[],"times":{"CameroonPlacesTest::testCanInstantiateCameroonPlaces":0.015,"CameroonPlacesTest::testCountryIsCameroon":0.004,"CameroonPlacesTest::testRegionsCount":0.003,"CameroonPlacesTest::testFindByCodeReturnsCorrectPlace":0,"CameroonPlacesTest::testSearchReturnsResults":0.002}}
